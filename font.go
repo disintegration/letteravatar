@@ -213,7 +213,7 @@ import (
 	"compress/gzip"
 	"io"
 
-    "github.com/golang/freetype/truetype"
+	"github.com/golang/freetype/truetype"
 )
 
 
@@ -224,7 +224,7 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-    defer gz.Close()
+	defer gz.Close()
 
 	var buf bytes.Buffer
 	io.Copy(&buf, gz)
@@ -232,7 +232,7 @@ func init() {
 		panic(err)
 	}
 
-    defaultFont, err = truetype.Parse(buf.Bytes())
+	defaultFont, err = truetype.Parse(buf.Bytes())
 	if err != nil {
 		panic(err)
 	}
