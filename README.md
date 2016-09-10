@@ -22,6 +22,18 @@ type Options struct {
 }
 ```
 
+Using a custom palette:
+
+```go
+img, err := letteravatar.Draw(100, 'A', &letteravatar.Options{
+	Palette: []color.Color{
+		color.RGBA{255, 0, 0, 255},
+		color.RGBA{0, 255, 0, 255},
+		color.RGBA{0, 0, 255, 255},
+	},
+})
+```
+
 ## Examples
 
 ![](example/Alice.png)
