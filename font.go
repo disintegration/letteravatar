@@ -216,7 +216,6 @@ import (
 	"github.com/golang/freetype/truetype"
 )
 
-
 var defaultFont *truetype.Font
 
 func init() {
