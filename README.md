@@ -19,6 +19,7 @@ type Options struct {
 	Font        *truetype.Font
 	Palette     []color.Color
 	LetterColor color.Color
+	PaletteKey  string
 }
 ```
 
@@ -33,6 +34,10 @@ img, err := letteravatar.Draw(100, 'A', &letteravatar.Options{
 	},
 })
 ```
+
+## Documentation
+
+[https://godoc.org/github.com/disintegration/letteravatar](https://godoc.org/github.com/disintegration/letteravatar)
 
 ## Examples
 
@@ -103,3 +108,5 @@ func main() {
 The package "letteravatar" is distributed under the terms of the MIT license.
 
 The Roboto-Medium font is distributed under the terms of the Apache License v2.0.
+
+See [LICENSE](LICENSE).

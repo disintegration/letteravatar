@@ -70,6 +70,33 @@ func TestDraw(t *testing.T) {
 	}
 }
 
+func TestPaletteKey(t *testing.T) {
+	users := []string{
+		"Username 1",
+		"Username 2",
+		"Username 3",
+		"Username 4",
+		"Username 5",
+	}
+	avatars := make(map[string]image.Image)
+	for _, u := range users {
+		img, err := Draw(30, []rune(u)[0], &Options{PaletteKey: u})
+		if err != nil {
+			t.Fatalf("failed to create avatar for %s: %s", u, err)
+		}
+		avatars[u] = img
+	}
+	for _, u := range users {
+		img, err := Draw(30, []rune(u)[0], &Options{PaletteKey: u})
+		if err != nil {
+			t.Fatalf("failed to create avatar for %s: %s", u, err)
+		}
+		if !reflect.DeepEqual(avatars[u], img) {
+			t.Fatalf("avatar mismatch for %s: %#v, %#v", avatars[u], img)
+		}
+	}
+}
+
 func compareImages(img1, img2 image.Image) float64 {
 	if !img1.Bounds().Eq(img2.Bounds()) {
 		return 0

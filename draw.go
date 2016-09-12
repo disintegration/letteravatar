@@ -19,6 +19,11 @@ type Options struct {
 	Font        *truetype.Font
 	Palette     []color.Color
 	LetterColor color.Color
+
+	// PaletteKey is used to pick the background color from the Palette.
+	// Using the same PaletteKey leads to the same background color being picked.
+	// If PaletteKey is empty (default) the background color is picked randomly.
+	PaletteKey string
 }
 
 var defaultLetterColor = color.RGBA{0xf0, 0xf0, 0xf0, 0xf0}
@@ -43,7 +48,11 @@ func Draw(size int, letter rune, options *Options) (image.Image, error) {
 
 	var bgColor color.Color = color.RGBA{0x00, 0x00, 0x00, 0xff}
 	if len(palette) > 0 {
-		bgColor = palette[randint(len(palette))]
+		if options != nil && len(options.PaletteKey) > 0 {
+			bgColor = palette[keyindex(len(palette), options.PaletteKey)]
+		} else {
+			bgColor = palette[randint(len(palette))]
+		}
 	}
 
 	return drawAvatar(bgColor, letterColor, font, size, letter)
@@ -98,6 +107,14 @@ func newRGBA(w, h int, c color.Color) *image.RGBA {
 		}
 	}
 	return img
+}
+
+func keyindex(n int, key string) int {
+	var index int64
+	for _, r := range key {
+		index = (index + int64(r)) % int64(n)
+	}
+	return int(index)
 }
 
 var (
