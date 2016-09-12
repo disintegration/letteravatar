@@ -92,7 +92,7 @@ func TestPaletteKey(t *testing.T) {
 			t.Fatalf("failed to create avatar for %s: %s", u, err)
 		}
 		if !reflect.DeepEqual(avatars[u], img) {
-			t.Fatalf("avatar mismatch for %s: %#v, %#v", avatars[u], img)
+			t.Fatalf("avatar mismatch for %s: %#v, %#v", u, avatars[u], img)
 		}
 	}
 }
