@@ -28,7 +28,7 @@ func main() {
 	for _, name := range names {
 		firstLetter, _ := utf8.DecodeRuneInString(name)
 
-		img, err := letteravatar.Draw(75, firstLetter, nil)
+		img, err := letteravatar.Draw(75, firstLetter, &letteravatar.Options{})
 		if err != nil {
 			log.Fatal(err)
 		}
