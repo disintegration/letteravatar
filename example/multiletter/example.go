@@ -8,7 +8,7 @@ import (
 
 	"github.com/golang/freetype/truetype"
 
-	"github.com/disintegration/letteravatar"
+	"github.com/UnderTreeTech/letteravatar"
 )
 
 var names = []string{

@@ -1,4 +1,4 @@
-module github.com/disintegration/letteravatar
+module github.com/UnderTreeTech/letteravatar
 
 go 1.14
 

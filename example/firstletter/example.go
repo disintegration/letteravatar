@@ -6,7 +6,7 @@ import (
 	"os"
 	"unicode/utf8"
 
-	"github.com/disintegration/letteravatar"
+	"github.com/UnderTreeTech/letteravatar"
 )
 
 var names = []string{
