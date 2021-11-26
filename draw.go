@@ -20,6 +20,9 @@ type Options struct {
 	Palette     []color.Color
 	LetterColor color.Color
 
+	// FontSize is used to set font size
+	FontSize int
+
 	// PaletteKey is used to pick the background color from the Palette.
 	// Using the same PaletteKey leads to the same background color being picked.
 	// If PaletteKey is empty (default) the background color is picked randomly.
@@ -30,7 +33,7 @@ var defaultLetterColor = color.RGBA{0xf0, 0xf0, 0xf0, 0xf0}
 
 // Draw generates a new letter-avatar image of the given size using the given letter
 // with the given options. Default parameters are used if a nil *Options is passed.
-func Draw(size int, letter rune, options *Options) (image.Image, error) {
+func Draw(size int, letter []rune, options *Options) (image.Image, error) {
 	font := defaultFont
 	if options != nil && options.Font != nil {
 		font = options.Font
@@ -55,14 +58,18 @@ func Draw(size int, letter rune, options *Options) (image.Image, error) {
 		}
 	}
 
-	return drawAvatar(bgColor, letterColor, font, size, letter)
+	fontSize := float64(options.FontSize)
+	if options.FontSize == 0 {
+		fontSize = float64(size) * 0.6
+	}
+
+	return drawAvatar(bgColor, letterColor, font, size, fontSize, letter)
 }
 
-func drawAvatar(bgColor, fgColor color.Color, font *truetype.Font, size int, letter rune) (image.Image, error) {
+func drawAvatar(bgColor, fgColor color.Color, font *truetype.Font, size int, fontSize float64, letter []rune) (image.Image, error) {
 	dst := newRGBA(size, size, bgColor)
 
-	fontSize := float64(size) * 0.6
-	src, err := drawString(bgColor, fgColor, font, fontSize, string(letter))
+	src, err := drawString(bgColor, fgColor, font, fontSize, letter)
 	if err != nil {
 		return nil, err
 	}
@@ -73,12 +80,15 @@ func drawAvatar(bgColor, fgColor color.Color, font *truetype.Font, size int, let
 	return dst, nil
 }
 
-func drawString(bgColor, fgColor color.Color, font *truetype.Font, fontSize float64, str string) (image.Image, error) {
+func drawString(bgColor, fgColor color.Color, font *truetype.Font, fontSize float64, letter []rune) (image.Image, error) {
 	c := freetype.NewContext()
 	c.SetDPI(72)
 
 	bb := font.Bounds(c.PointToFixed(fontSize))
 	w := bb.Max.X.Ceil() - bb.Min.X.Floor()
+	if len(letter) > 0 {
+		w = w + int(fontSize)*(len(letter)-1)
+	}
 	h := bb.Max.Y.Ceil() - bb.Min.Y.Floor()
 
 	dst := newRGBA(w, h, bgColor)
@@ -90,7 +100,7 @@ func drawString(bgColor, fgColor color.Color, font *truetype.Font, fontSize floa
 	c.SetFontSize(fontSize)
 	c.SetFont(font)
 
-	p, err := c.DrawString(str, fixed.Point26_6{X: 0, Y: bb.Max.Y})
+	p, err := c.DrawString(string(letter), fixed.Point26_6{X: 0, Y: bb.Max.Y})
 	if err != nil {
 		return nil, err
 	}
